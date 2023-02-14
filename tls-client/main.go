@@ -18,8 +18,8 @@ var (
 )
 
 const (
-	//address  = "localhost:50051"
-	address  = "net-tls-service:50051"
+	address = "localhost:50051"
+	//address  = "net-tls-service:50051"
 	hostname = "localhost"
 )
 

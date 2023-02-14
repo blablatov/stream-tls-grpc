@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	pb "github.com/blablatov/stream-grpc/stream-tls-grpc/tls-proto"
+	pb "github.com/blablatov/stream-tls-grpc/tls-proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
