@@ -11,7 +11,7 @@ go install github.com/golang/mock/mockgen@v1.5.0
 (Runs generation code of mock up for interface ProductInfoClient): 
        
 ```shell script
-mockgen github.com/blablatov/stream-grpc/stream-tls-grpc/tls-proto ProductInfoClient > mockups/prodinfo_mock.go
+mockgen github.com/blablatov/stream-tls-grpc/tls-proto ProductInfoClient > mockups/prodinfo_mock.go
 ```
 
 ### Run test    
