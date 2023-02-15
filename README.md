@@ -6,27 +6,16 @@ In order to build, Go to ``Go`` module directory location `stream-tls-grpc/tls-s
  shell command:
 ```
 go build -v 
-```
-
-In order to run, Go to ``Go`` module directory location `stream-tls-grpc/tls-service` and execute the following
-shell command:
-
-```
 ./tls-server
-```
+```   
 
 ## Building and Running Client   
 
 In order to build, Go to ``Go`` module directory location `stream-tls-grpc/tls-client` and execute the following shell command:
 ```
 go build -v 
-```
-
-In order to run, Go to ``Go`` module directory location `stream-tls-grpc/tls-client` and execute the following shell command:
-
-```
-./client
-```
+./tls-client
+```  
 
 ## Additional Information
 
