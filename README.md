@@ -6,7 +6,7 @@ In order to build, Go to ``Go`` module directory location `stream-tls-grpc/tls-s
  shell command:
 ```
 go build -v 
-./tls-server
+./tls-service
 ```   
 
 ## Building and Running Client   
