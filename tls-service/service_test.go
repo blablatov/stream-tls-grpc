@@ -43,10 +43,10 @@ func getBufDialer(listener *bufconn.Listener) func(context.Context, string) (net
 	}
 }
 
-// Initialization of BufConn.
-// Package bufconn provides a net. Реализует имитацию запуска сервера на реальном порту
-// Conn implemented by a buffer and related dialing and listening functionality.
-// Реализован с использованием буфера
+// Initialization of BufConn
+// Package bufconn provides a net
+// Conn implemented by a buffer and related dialing and listening functionality
+// Реализует имитацию запуска сервера на реальном порту с использованием буфера
 func initGRPCServerBuffConn() {
 	listener = bufconn.Listen(bufSize)
 	s := grpc.NewServer()

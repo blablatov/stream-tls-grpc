@@ -15,7 +15,7 @@ openssl req -x509 -out server.crt -keyout server.key \
 Создание Docker контейнера для gRPC-сервера (build container of server):      
 
 ```shell script
-./docker build -t tls-service .
+docker build -t tls-service .
 ```
 
 Развернуть задание с серверным gRPC-приложением:         

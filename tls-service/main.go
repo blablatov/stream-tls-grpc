@@ -9,9 +9,11 @@ import (
 	"strings"
 
 	pb "github.com/blablatov/stream-tls-grpc/tls-proto"
+	"github.com/grpc-ecosystem/go-grpc-middleware"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
+	_ "google.golang.org/grpc/encoding/gzip"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 )
@@ -28,6 +30,8 @@ const (
 )
 
 func main() {
+	log.SetPrefix("Server event: ")
+	log.SetFlags(log.Lshortfile)
 	// Считываем и анализируем открытый/закрытый ключи и создаем сертификат, чтобы включить TLS
 	cert, err := tls.LoadX509KeyPair(crtFile, keyFile)
 	if err != nil {
@@ -38,8 +42,14 @@ func main() {
 		// Enable TLS for all incoming connections.
 		// Включаем TLS для всех входящих соединений, используя сертификаты для аутентификации
 		grpc.Creds(credentials.NewServerTLSFromCert(&cert)),
-		// Добавляем с помощью вызова grpc.UnaryInterceptor перехватчик, будет направлять все клиентские запросы
-		grpc.UnaryInterceptor(ensureValidToken),
+		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
+			// Registers unary interceptor to gRPC-server
+			// Будет направлять все клиентские запросы к функции ensureValidBasicCredentials
+			grpc.UnaryServerInterceptor(ensureValidToken),
+			// Регистрация дополнительного унарного перехватчика на gRPC-сервере
+			// Будет направлять все клиентские запросы к функции orderUnaryServerInterceptor
+			grpc.UnaryServerInterceptor(orderUnaryServerInterceptor),
+		)),
 	}
 
 	// Создаем новый экземпляр gRPC-сервера, передавая ему аутентификационные данные
@@ -70,7 +80,7 @@ func valid(authorization []string) bool {
 	return token == "blablatok-tokblabla-blablatok"
 }
 
-// Определяем функцию ensureValidToken для проверки подлинности токена.
+// Checking token. Определяем функцию ensureValidToken для проверки подлинности токена.
 // Если тот отсутствует или недействителен, тогда перехватчик блокирует выполнение и возвращает ошибку.
 // Или вызывается следующий обработчик, которому передается контекст и интерфейс.
 func ensureValidToken(ctx context.Context, req interface{},
@@ -85,4 +95,23 @@ func ensureValidToken(ctx context.Context, req interface{},
 	}
 	// Continue execution of handler after ensuring a valid token.
 	return handler(ctx, req)
+}
+
+// Server : Unary Interceptor
+// Серверный унарный перехватчик в gRPC
+func orderUnaryServerInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	// Pre-processing logic
+	// Gets info about the current RPC call by examining the args passed in
+	// Логика перед вызовом. Получает информацию о текущем RPC-вызове путем анализа переданных аргументов
+	log.Println("====== [Server Interceptor] ", info.FullMethod)
+	log.Printf(" Pre Proc Message : %s", req)
+
+	// Invoking the handler to complete the normal execution of a unary RPC.
+	// Вызываем обработчик, чтобы завершить нормальное выполнение унарного RPC-вызова
+	m, err := handler(ctx, req)
+
+	// Post processing logic
+	// Логика после вызова
+	log.Printf(" Post Proc Message : %s", m)
+	return m, err
 }

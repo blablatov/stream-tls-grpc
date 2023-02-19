@@ -35,7 +35,7 @@ func TestAddProduct(t *testing.T) {
 	moclProdInfoClient := NewMockProductInfoClient(ctrl)
 
 	name := "Sumsung S9999"
-	description := "Samsung Galaxy S10 is the latest smart phone, launched in February 2039"
+	description := "Samsung Galaxy S9999 is the latest smart phone, launched in February 2039"
 	price := float32(7777.0)
 	req := &pb.Product{Name: name, Description: description, Price: price}
 
@@ -50,7 +50,7 @@ func testAddProduct(t *testing.T, client pb.ProductInfoClient) {
 	defer cancel()
 
 	name := "Sumsung S9999"
-	description := "Samsung Galaxy S10 is the latest smart phone, launched in February 2039"
+	description := "Samsung Galaxy S9999 is the latest smart phone, launched in February 2039"
 	price := float32(7777.0)
 
 	r, err := client.AddProduct(ctx, &pb.Product{Name: name, Description: description, Price: price})
